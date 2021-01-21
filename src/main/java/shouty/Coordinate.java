@@ -10,9 +10,8 @@ public class Coordinate {
     }
 
     public int distanceFrom(Coordinate other) {
-        // TODO: actually calculate distance between the coordinates.
-        //       e.g. return Math.abs(x - other.x);
-
-        return 0;
+        final double xDiff = (double) x - other.x;
+        final double yDiff = (double) y - other.y;
+        return (int) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 }
