@@ -6,7 +6,7 @@ Feature: Hear Shout
     Given Lucy is at 0, 0
 
   Scenario Outline: only hear in-range shouts
-    And Sean is at <Seans-location>
+    Given Sean is at <Seans-location>
     When Sean shouts
     Then Lucy should hear <what-Lucy-hears>
     Examples: some simple examples
@@ -37,4 +37,10 @@ Feature: Hear Shout
       And Sean shouts
       Then Lucy should hear 2 shouts from Sean
 
+    Scenario: Shouts dont move with the shouter
+      Given Sean is at 0, 1001
+      When Sean shouts
+      And Sean is at 0, 999
+      And Sean shouts
+      Then Lucy should hear 1 shouts from Sean
 
