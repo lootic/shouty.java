@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 
 public class ShoutyTest {
@@ -31,6 +33,49 @@ public class ShoutyTest {
 
         final List<Shout> shouts = shouty.getShoutsNear(origin);
 
-        assertEquals(List.of(new Shout(SOME_PERSON, origin, SOME_MESSAGE)), shouts);
+        assertEquals(1, shouts.size());
+        final Shout shout = shouts.get(0);
+        assertEquals(SOME_PERSON, shout.getShouter());
+        assertEquals(origin, shout.getCoordinate());
+        assertEquals(SOME_MESSAGE, shout.getMessage());
+    }
+
+    @Test
+    public void defaultShoutExpiryIs5Minutes() {
+        Shouty shouty = new Shouty();
+        final Coordinate origin = new Coordinate(0, 0);
+        shouty.setLocation(SOME_PERSON, origin);
+        shouty.shout(SOME_PERSON, SOME_MESSAGE);
+
+        final List<Shout> shouts = shouty.getShoutsNear(origin);
+
+        assertEquals(1, shouts.size());
+        assertEquals(Duration.ofMinutes(5), shouts.get(0).getTimeout());
+    }
+
+    @Test
+    public void canShoutWithCustomShoutTimeout() {
+        Shouty shouty = new Shouty();
+        final Coordinate origin = new Coordinate(0, 0);
+        shouty.setLocation(SOME_PERSON, origin);
+        shouty.shout(SOME_PERSON, SOME_MESSAGE, Duration.ofSeconds(10));
+
+        final List<Shout> shouts = shouty.getShoutsNear(origin);
+
+        assertEquals(1, shouts.size());
+        assertEquals(Duration.ofSeconds(10), shouts.get(0).getTimeout());
+    }
+
+    @Test
+    public void cannotHearShoutAfterTimeout() {
+        Shouty shouty = new Shouty();
+        final Coordinate origin = new Coordinate(0, 0);
+        shouty.setLocation(SOME_PERSON, origin);
+        shouty.shout(SOME_PERSON, SOME_MESSAGE, Duration.ofSeconds(10));
+
+        shouty.setClock(Clock.offset(shouty.getClock(), Duration.ofMinutes(1)));
+
+        final List<Shout> shouts = shouty.getShoutsNear(origin);
+        assertEquals(emptyList(), shouts);
     }
 }

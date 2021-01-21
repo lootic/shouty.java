@@ -4,9 +4,13 @@ import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Clock;
+import java.time.Duration;
 
 
 public class ShoutSteps {
@@ -39,5 +43,23 @@ public class ShoutSteps {
         assertEquals(numberOfShouts, shouty.getShoutsHeardBy(listener).stream()
                 .filter(shout -> shout.getShouter().equals(shouter))
                 .count());
+    }
+
+    @Then("shout at {coordinate} from {word} times out in {int} minutes")
+    public void shoutFromLucyTimesOutInMinutes(Coordinate coordinate, String shouter, int timeoutMinutes) {
+        final Shout foundShout = shouty.getShoutsNear(coordinate).stream()
+                .filter(shout -> shout.getShouter().equals(shouter))
+                .findAny().orElseThrow(() -> new RuntimeException("Shout from " + shouter + " not found"));
+        assertEquals(Duration.ofMinutes(timeoutMinutes), foundShout.getTimeout());
+    }
+
+    @When("{word} shouts with timeout {int} minutes")
+    public void personShoutsWithTimeout(String person, int timeoutMinutes) {
+        shouty.shout(person, ARBITRARY_MESSAGE, Duration.ofMinutes(timeoutMinutes));
+    }
+
+    @And("{int} minutes passes")
+    public void minutesPasses(int minutes) {
+        shouty.setClock(Clock.offset(shouty.getClock(), Duration.ofMinutes(minutes)));
     }
 }
