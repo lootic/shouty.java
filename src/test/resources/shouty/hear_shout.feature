@@ -44,10 +44,10 @@ Feature: Hear Shout
       And Sean shouts
       Then Lucy should hear 1 shouts from Sean
 
-    Scenario: Shouts live for some time
+    Scenario: Shouts expire
       Given Sean is at 0, 1001
       And the time is 09:00:00
       And Sean shouts
-      When the time is 09:00:59
+      When the time is 09:01:01
       And Lucy is at 0, 999
-      Then Lucy should hear 1 shouts from Sean
+      Then Lucy should hear nothing

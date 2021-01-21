@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,6 @@ public class ShoutSteps {
 
     @Given("the time is {time}")
     public void the_time_is(LocalDateTime currentTime) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        shouty.setCurrentTime(currentTime);
     }
 }
