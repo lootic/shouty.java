@@ -1,27 +1,25 @@
 package shouty;
 
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
+
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.DataTableType;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-
-import java.util.List;
-import java.util.Map;
-
 
 public class ShoutSteps {
     private static final String ARBITRARY_MESSAGE = "Hello, world";
-    private final Shouty shouty = new Shouty();
+    private final Shouty shouty;
 
-    @Given("{word} is at {int}, {int}")
-    public void person_is_at(String name, int xCoord, int yCoord) {
-        shouty.setLocation(name, new Coordinate(xCoord, yCoord));
+    @Autowired
+    public ShoutSteps(Shouty shouty) {
+        this.shouty = shouty;
     }
 
     @When("{word} shouts")
@@ -47,32 +45,8 @@ public class ShoutSteps {
         assertFalse(listener + " can hear " + shouter, canHearShouter);
     }
 
-    @Given("people are located at")
-    public void peopleAreLocatedAt(List<PersonLocation> personLocations) {
-//        dataTable.asList().get(1).get(0) //FIXME - does not work
-
-        personLocations.forEach( personLocation ->
-                shouty.setLocation(personLocation.name, new Coordinate(personLocation.x, personLocation.y)));
-    }
-
-    @DataTableType
-    public PersonLocation definePersonLocation(Map<String, String> entry) {
-        return new PersonLocation(
-                entry.get("name"),
-                Integer.parseInt(entry.get("x")),
-                Integer.parseInt(entry.get("y"))
-        );
-    }
-
-    private static class PersonLocation {
-        private final String name;
-        private final int x;
-        private final int y;
-
-        public PersonLocation(String name, int x, int y) {
-            this.name = name;
-            this.x = x;
-            this.y = y;
-        }
+    @Then("{word} should hear {int} shouts from {word}")
+    public void lucy_should_hear_shouts_from_sean(String listener, int numberOfShouts, String shouter) {
+        assertEquals(numberOfShouts, shouty.getShoutsHeardBy(listener).get(shouter).size());
     }
 }
