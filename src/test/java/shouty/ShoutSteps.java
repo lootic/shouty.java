@@ -1,16 +1,15 @@
 package shouty;
 
-import io.cucumber.java.DataTableType;
-import io.cucumber.java.DocStringType;
-import io.cucumber.java.ParameterType;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.DataTableType;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import java.util.List;
 import java.util.Map;
@@ -46,5 +45,34 @@ public class ShoutSteps {
         Map<String, List<String>> heardShouts = shouty.getShoutsHeardBy(listener);
         boolean canHearShouter = heardShouts.containsKey(shouter);
         assertFalse(listener + " can hear " + shouter, canHearShouter);
+    }
+
+    @Given("people are located at")
+    public void peopleAreLocatedAt(List<PersonLocation> personLocations) {
+//        dataTable.asList().get(1).get(0) //FIXME - does not work
+
+        personLocations.forEach( personLocation ->
+                shouty.setLocation(personLocation.name, new Coordinate(personLocation.x, personLocation.y)));
+    }
+
+    @DataTableType
+    public PersonLocation definePersonLocation(Map<String, String> entry) {
+        return new PersonLocation(
+                entry.get("name"),
+                Integer.parseInt(entry.get("x")),
+                Integer.parseInt(entry.get("y"))
+        );
+    }
+
+    private static class PersonLocation {
+        private final String name;
+        private final int x;
+        private final int y;
+
+        public PersonLocation(String name, int x, int y) {
+            this.name = name;
+            this.x = x;
+            this.y = y;
+        }
     }
 }
