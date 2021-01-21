@@ -10,8 +10,8 @@ import java.util.Map;
 @Component
 public class Shouty {
     private static final int MESSAGE_RANGE = 1000;
-    private Map<String, Coordinate> locations = new HashMap<String, Coordinate>();
-    private Map<String, List<String> > shouts = new HashMap<String, List<String> >();
+    private final Map<String, Coordinate> locations = new HashMap<>();
+    private final Map<String, List<String> > shouts = new HashMap<>();
 
     public void setLocation(String person, Coordinate location) {
         locations.put(person, location);
@@ -19,7 +19,7 @@ public class Shouty {
 
     public void shout(String shouter, String shout) {
         if (!shouts.containsKey(shouter)) {
-            List<String> personsShouts = new ArrayList<String>();
+            List<String> personsShouts = new ArrayList<>();
             shouts.put(shouter, personsShouts);
         }
 
@@ -27,14 +27,16 @@ public class Shouty {
     }
 
     public Map<String, List<String>> getShoutsHeardBy(String listener) {
-        HashMap<String, List<String> > shoutsHeard = new HashMap<String, List<String> >();
-
-        for (Map.Entry<String, List<String> > entry : shouts.entrySet()) {
+        HashMap<String, List<String> > shoutsHeard = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : shouts.entrySet()) {
             String shouter = entry.getKey();
-            List<String> personsShouts = entry.getValue();
-            int distance = locations.get(listener).distanceFrom(locations.get(shouter));
-            if (distance < MESSAGE_RANGE)
-                shoutsHeard.put(shouter, personsShouts);
+            if (!listener.equals(shouter)) {
+                List<String> personsShouts = entry.getValue();
+                int distance = locations.get(listener).distanceFrom(locations.get(shouter));
+                if (distance < MESSAGE_RANGE) {
+                    shoutsHeard.put(shouter, personsShouts);
+                }
+            }
         }
 
         return shoutsHeard;
