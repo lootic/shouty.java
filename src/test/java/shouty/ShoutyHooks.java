@@ -4,9 +4,9 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
 public class ShoutyHooks {
-    @Before(order = 4)
+    @Before(order=4, value="@wip or @SpecialTest")
     public void beforeEarly() {
-        System.out.println("Before early!!!");
+        System.out.println("Before wip!!!");
     }
 
     @Before

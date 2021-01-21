@@ -12,9 +12,9 @@ public class LocationSteps {
     @Autowired
     private Shouty shouty;
 
-    @Given("{word} is at {int}, {int}")
-    public void personIsAt(String person, int xCoord, int yCoord) {
-        shouty.setLocation(person, new Coordinate(xCoord, yCoord));
+    @Given("{word} is at {coordinate}")
+    public void personIsAt(String person, Coordinate coordinate) {
+        shouty.setLocation(person, coordinate);
     }
 
     @Given("people are located at")
