@@ -29,5 +29,7 @@ Feature: Hear Shout
     When Sean shouts
     Then Lucy should hear <what-Lucy-hears>
     Examples: some simple examples
-      | Seans-location | what-Lucy-hears |        | 0, 900         | Sean            |        | 800, 800       | nothing         |
+      | Seans-location | what-Lucy-hears |
+      | 0, 900         | Sean            |
+      | 800, 800       | nothing         |
 
