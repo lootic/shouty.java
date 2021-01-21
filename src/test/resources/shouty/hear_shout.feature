@@ -25,7 +25,6 @@ Feature: Hear Shout
 
   Rule: Shouters should not hear their own shouts
     Scenario: Shouters should not hear themselves
-      Given Lucy is at 0, 0
       When Lucy shouts
       Then Lucy should hear nothing
 
