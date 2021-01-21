@@ -1,9 +1,11 @@
 package shouty;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +48,13 @@ public class ShoutSteps {
     }
 
     @Then("{word} should hear {int} shouts from {word}")
-    public void lucy_should_hear_shouts_from_sean(String listener, int numberOfShouts, String shouter) {
+    public void listener_should_hear_shouts_from_shouter(String listener, int numberOfShouts, String shouter) {
         assertEquals(numberOfShouts, shouty.getShoutsHeardBy(listener).get(shouter).size());
+    }
+
+    @Given("the time is {time}")
+    public void the_time_is(LocalDateTime currentTime) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 }
