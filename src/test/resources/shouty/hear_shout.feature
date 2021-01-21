@@ -26,3 +26,10 @@ Feature: Hear Shout
   Scenario: Shouter should not hear themself
     When Sean shouts
     Then Sean should not hear Sean
+
+  Scenario: Multiple shouts from one person
+    Given Lucy is at 0, 0
+    And Sean is at 0, 500
+    When Sean shouts
+    And Sean shouts
+    Then Lucy should hear 2 shouts from Sean

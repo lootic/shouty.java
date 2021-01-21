@@ -1,5 +1,6 @@
 package shouty;
 
+import io.cucumber.spring.ScenarioScope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
