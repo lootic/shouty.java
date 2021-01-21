@@ -1,14 +1,12 @@
 package shouty;
 
-import io.cucumber.java.DataTableType;
-import io.cucumber.java.DocStringType;
-import io.cucumber.java.ParameterType;
+import static java.util.Collections.emptyMap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import static java.util.Collections.emptyMap;
-import static org.junit.Assert.assertEquals;
 
 
 public class ShoutSteps {
@@ -16,22 +14,27 @@ public class ShoutSteps {
     private final Shouty shouty = new Shouty();
 
     @Given("{word} is at {int}, {int}")
-    public void lucy_is_at(String person, int xCoord, int yCoord) {
+    public void personIsAt(String person, int xCoord, int yCoord) {
         shouty.setLocation(person, new Coordinate(xCoord, yCoord));
     }
 
-    @When("Sean shouts")
-    public void sean_shouts() {
-        shouty.shout("Sean", ARBITRARY_MESSAGE);
+    @When("{word} shouts")
+    public void personShouts(String person) {
+        shouty.shout(person, ARBITRARY_MESSAGE);
     }
 
-    @Then("Lucy should hear Sean")
-    public void lucy_should_hear_sean() {
-        assertEquals(1, shouty.getShoutsHeardBy("Lucy").size());
+    @Then("{word} should hear Sean")
+    public void listenerShouldHearShouter(String listener) {
+        assertEquals(1, shouty.getShoutsHeardBy(listener).size());
     }
 
-    @Then("Lucy should hear nothing")
-    public void lucy_should_hear_nothing() {
-        assertEquals(emptyMap(), shouty.getShoutsHeardBy("Lucy"));
+    @Then("{word} should hear nothing")
+    public void listenerShouldHereNothing(String listener) {
+        assertEquals(emptyMap(), shouty.getShoutsHeardBy(listener));
+    }
+
+    @Then("{word} should not hear {word}")
+    public void listenerShouldNotHearShouter(String listener, String shouter) {
+        assertNull(shouty.getShoutsHeardBy(listener).get(shouter));
     }
 }
